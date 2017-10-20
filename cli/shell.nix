@@ -3,6 +3,7 @@
 (import ./default.nix) {
   stdenv            = pkgs.stdenv;
   fetchFromGitHub   = pkgs.fetchFromGitHub;
+  fetchurl          = pkgs.fetchurl;
   # which             = pkgs.which;
   # cmake             = pkgs.cmake;
   # clang             = pkgs.clang;
