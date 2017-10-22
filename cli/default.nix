@@ -14,10 +14,16 @@
 # , liburcu
 # , libuuid
 # , libkrb5
+, patchelf
 # , debug ? false
 }:
 
 let
+  # available SDKs: https://github.com/dotnet/core/blob/master/release-notes/download-archive.md
+  # sdk107 = fetchurl {
+  #   url = "https://download.microsoft.com/download/B/0/D/B0D6D983-3188-4008-A852-94BCED5355E6/dotnet-ubuntu.16.04-x64.1.0.7.tar.gz";
+  #   sha256 = "0n3nfpwmws4fkpgrh17hh9f7yjbb31qlffp9y8m94s3x672wa4jb";
+  # };
   sdk203 = fetchurl {
     url = "https://dotnetcli.azureedge.net/dotnet/Sdk/2.0.3-servicing-007037/dotnet-sdk-2.0.3-servicing-007037-linux-x64.tar.gz";
     sha256 = "0kqk1f0vfdfyb9mp7d4y83airkxyixmxb7lrx0h0hym2a9661ch8";
@@ -39,12 +45,12 @@ in
         --replace '[ -z "$($LDCONFIG_COMMAND' '# [ -z "$($LDCONFIG_COMMAND'
       substituteInPlace scripts/obtain/dotnet-install.sh \
         --replace 'local hasMinimum=false' 'local hasMinimum=true'
-      # substituteInPlace run-build.sh \
-      #   --replace '1.0.0-preview2-1-003177' '2.1.0-preview1-007012'
-      # substituteInPlace scripts/obtain/dotnet-install.sh \
-      #   --replace 'zip_path=$(mktemp $temporary_file_template)' "zip_path=$(pwd)/dotnet-sdk-2.0.3-servicing-007037-linux-x64.tar.gz"
-      # substituteInPlace scripts/obtain/dotnet-install.sh \
-      #   --replace 'download "$download_link" $zip_path' '# download "$download_link" $zip_path'
+      substituteInPlace scripts/obtain/dotnet-install.sh \
+        --replace 'zip_path=$(mktemp $temporary_file_template)' "zip_path=$(pwd)/dotnet-sdk-2.0.3-servicing-007037-linux-x64.tar.gz"
+      substituteInPlace scripts/obtain/dotnet-install.sh \
+        --replace 'download "$download_link" $zip_path' '# download "$download_link" $zip_path'
+      substituteInPlace scripts/obtain/dotnet-install.sh \
+        --replace 'extract_dotnet_package $zip_path $install_root' '# extract_dotnet_package $zip_path $install_root'
     '';
 
     # buildInputs = [
@@ -77,13 +83,15 @@ in
     #   "format"
     # ];
 
-    # 'cp "${fetchurl {...}}" src/foobar.tar.gz'
-    # https://dotnetcli.azureedge.net/dotnet/Sdk/2.0.3-servicing-007037/dotnet-sdk-2.0.3-servicing-007037-linux-x64.tar.gz
-
     buildPhase = ''
       runHook preBuild
       cp -v ${sdk203} ./dotnet-sdk-2.0.3-servicing-007037-linux-x64.tar.gz
-      ./build.sh
+      mkdir -p .dotnet_stage0/x64/
+      tar -xf ./dotnet-sdk-2.0.3-servicing-007037-linux-x64.tar.gz -C .dotnet_stage0/x64/
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" .dotnet_stage0/x64/dotnet
+      patchelf --set-rpath "${stdenv.cc.cc.lib}/lib64" .dotnet_stage0/x64/dotnet
+      .dotnet_stage0/x64/dotnet --version
+      # ./build.sh
       runHook postBuild
     '';
 
