@@ -37,6 +37,10 @@ in
     patchPhase = ''
       substituteInPlace scripts/obtain/dotnet-install.sh \
         --replace '[ -z "$($LDCONFIG_COMMAND' '# [ -z "$($LDCONFIG_COMMAND'
+      substituteInPlace scripts/obtain/dotnet-install.sh \
+        --replace 'local hasMinimum=false' 'local hasMinimum=true'
+      # substituteInPlace run-build.sh \
+      #   --replace '1.0.0-preview2-1-003177' '2.1.0-preview1-007012'
       # substituteInPlace scripts/obtain/dotnet-install.sh \
       #   --replace 'zip_path=$(mktemp $temporary_file_template)' "zip_path=$(pwd)/dotnet-sdk-2.0.3-servicing-007037-linux-x64.tar.gz"
       # substituteInPlace scripts/obtain/dotnet-install.sh \
@@ -79,7 +83,7 @@ in
     buildPhase = ''
       runHook preBuild
       cp -v ${sdk203} ./dotnet-sdk-2.0.3-servicing-007037-linux-x64.tar.gz
-      ./build.sh --dry-run
+      ./build.sh
       runHook postBuild
     '';
 
