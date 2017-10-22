@@ -7,7 +7,7 @@
 # , llvmPackages
 , libunwind
 # , gettext
-# , openssl
+, openssl
 # , python2
 , icu
 # , lttng-ust
@@ -28,6 +28,7 @@ let
     url = "https://dotnetcli.azureedge.net/dotnet/Sdk/2.0.3-servicing-007037/dotnet-sdk-2.0.3-servicing-007037-linux-x64.tar.gz";
     sha256 = "0kqk1f0vfdfyb9mp7d4y83airkxyixmxb7lrx0h0hym2a9661ch8";
   };
+  rpath = "${stdenv.cc.cc.lib}/lib64:${libunwind}/lib:${libuuid.out}/lib:${icu}/lib:${openssl.out}/lib";
 in
   stdenv.mkDerivation rec {
     name = "cli-${version}";
@@ -88,9 +89,8 @@ in
       mkdir -p .dotnet_stage0/x64/
       tar -xf ./dotnet-sdk-2.0.3-servicing-007037-linux-x64.tar.gz -C .dotnet_stage0/x64/
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" .dotnet_stage0/x64/dotnet
-      patchelf --set-rpath "${stdenv.cc.cc.lib}/lib64:${libunwind}/lib:${libuuid.out}/lib" .dotnet_stage0/x64/dotnet
-      find -type f -name "*.so" -exec patchelf --set-rpath "${stdenv.cc.cc.lib}/lib64:${libunwind}/lib:${libuuid.out}/lib" {} \;
-      export LD_LIBRARY_PATH="${icu}/lib:$LD_LIBRARY_PATH"
+      patchelf --set-rpath "${rpath}" .dotnet_stage0/x64/dotnet
+      find -type f -name "*.so" -exec patchelf --set-rpath "${rpath}" {} \;
       echo -n "Dotnet version: "
       .dotnet_stage0/x64/dotnet --version
       # ./build.sh

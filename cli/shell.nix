@@ -10,7 +10,7 @@
   # llvmPackages      = pkgs.llvmPackages;
   libunwind         = pkgs.libunwind;
   # gettext           = pkgs.gettext;
-  # openssl           = pkgs.openssl;
+  openssl           = pkgs.openssl;
   # python2           = pkgs.python2;
   icu               = pkgs.icu;
   # lttng-ust         = pkgs.lttng-ust;
