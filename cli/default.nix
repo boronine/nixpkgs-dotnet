@@ -9,10 +9,10 @@
 # , gettext
 # , openssl
 # , python2
-# , icu
+, icu
 # , lttng-ust
 # , liburcu
-# , libuuid
+, libuuid
 # , libkrb5
 , patchelf
 # , debug ? false
@@ -71,7 +71,6 @@ in
     # ];
 
     configurePhase = ''
-      # override to avoid cmake running
       patchShebangs .
     '';
 
@@ -89,7 +88,10 @@ in
       mkdir -p .dotnet_stage0/x64/
       tar -xf ./dotnet-sdk-2.0.3-servicing-007037-linux-x64.tar.gz -C .dotnet_stage0/x64/
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" .dotnet_stage0/x64/dotnet
-      patchelf --set-rpath "${stdenv.cc.cc.lib}/lib64" .dotnet_stage0/x64/dotnet
+      patchelf --set-rpath "${stdenv.cc.cc.lib}/lib64:${libunwind}/lib:${libuuid.out}/lib" .dotnet_stage0/x64/dotnet
+      find -type f -name "*.so" -exec patchelf --set-rpath "${stdenv.cc.cc.lib}/lib64:${libunwind}/lib:${libuuid.out}/lib" {} \;
+      export LD_LIBRARY_PATH="${icu}/lib:$LD_LIBRARY_PATH"
+      echo -n "Dotnet version: "
       .dotnet_stage0/x64/dotnet --version
       # ./build.sh
       runHook postBuild

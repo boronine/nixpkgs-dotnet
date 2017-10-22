@@ -12,10 +12,10 @@
   # gettext           = pkgs.gettext;
   # openssl           = pkgs.openssl;
   # python2           = pkgs.python2;
-  # icu               = pkgs.icu;
+  icu               = pkgs.icu;
   # lttng-ust         = pkgs.lttng-ust;
   # liburcu           = pkgs.liburcu;
-  # libuuid           = pkgs.libuuid;
+  libuuid           = pkgs.libuuid;
   # libkrb5           = pkgs.libkrb5;
-  patchelf         = pkgs.patchelf;
+  patchelf          = pkgs.patchelf;
 }
