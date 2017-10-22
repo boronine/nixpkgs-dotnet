@@ -91,7 +91,7 @@ in
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" .dotnet_stage0/x64/dotnet
       patchelf --set-rpath "${rpath}" .dotnet_stage0/x64/dotnet
       find -type f -name "*.so" -exec patchelf --set-rpath "${rpath}" {} \;
-      echo -n "Dotnet version: "
+      echo -n "dotnet-sdk version: "
       .dotnet_stage0/x64/dotnet --version
       # ./build.sh
       runHook postBuild
