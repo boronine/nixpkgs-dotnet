@@ -2,8 +2,6 @@
 
 (import ./default.nix) {
   stdenv            = pkgs.stdenv;
-  fetchFromGitHub   = pkgs.fetchFromGitHub;
-  fetchurl          = pkgs.fetchurl;
   libunwind         = pkgs.libunwind;
   openssl           = pkgs.openssl;
   icu               = pkgs.icu;
@@ -11,5 +9,4 @@
   zlib              = pkgs.zlib;
   curl              = pkgs.curl;
   patchelf          = pkgs.patchelf;
-  mktemp            = pkgs.mktemp;
 }

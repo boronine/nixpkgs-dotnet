@@ -17,7 +17,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "coreclr-${version}";
+  name = "dotnet-clr-${version}";
   version = "2.0.0";
 
   src = fetchFromGitHub {
