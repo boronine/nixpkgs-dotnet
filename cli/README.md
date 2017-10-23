@@ -33,15 +33,16 @@ Now, configure `RPATH`. But first let's figure out what is the value of required
 
 ```bash
 nix-repl '<nixpkgs>'
-> "${stdenv.cc.cc.lib}/lib64:${libunwind}/lib:${libuuid.out}/lib:${icu}/lib:${openssl.out}/lib:${zlib}/lib"
+> "${stdenv.cc.cc.lib}/lib64:${libunwind}/lib:${libuuid.out}/lib:${icu}/lib:${openssl.out}/lib:${zlib}/lib:${curl.out}/lib"
 ```
 
 This will output expanded paths, just copy it and use instead of `[RPATH]`
 below (don't forget to exit `nix-repl` before proceeding):
 
 ```bash
-patchelf --set-rpath "[RPATH]" .dotnet_stage0/x64/dotnet
-find -type f -name "*.so" -exec patchelf --set-rpath "[RPATH]" {} \;
+RPATH=[RPATH]
+patchelf --set-rpath "$RPATH" .dotnet_stage0/x64/dotnet
+find -type f -name "*.so" -exec patchelf --set-rpath "$RPATH" {} \;
 echo -n "dotnet-sdk version: "
 .dotnet_stage0/x64/dotnet --version
 ./build.sh

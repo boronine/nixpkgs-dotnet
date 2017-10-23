@@ -15,6 +15,7 @@
 , libuuid
 # , libkrb5
 , zlib
+, curl
 , patchelf
 , mktemp
 # , debug ? false
@@ -30,7 +31,7 @@ let
     url = "https://dotnetcli.azureedge.net/dotnet/Sdk/2.0.3-servicing-007037/dotnet-sdk-2.0.3-servicing-007037-linux-x64.tar.gz";
     sha256 = "0kqk1f0vfdfyb9mp7d4y83airkxyixmxb7lrx0h0hym2a9661ch8";
   };
-  rpath = "${stdenv.cc.cc.lib}/lib64:${libunwind}/lib:${libuuid.out}/lib:${icu}/lib:${openssl.out}/lib:${zlib}/lib";
+  rpath = "${stdenv.cc.cc.lib}/lib64:${libunwind}/lib:${libuuid.out}/lib:${icu}/lib:${openssl.out}/lib:${zlib}/lib:${curl.out}/lib";
 in
   stdenv.mkDerivation rec {
     name = "cli-${version}";
