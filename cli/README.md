@@ -1,5 +1,13 @@
 # Nix sandbox for .NET Core CLR package
 
+## Build
+
+```bash
+nix-build shell.nix
+```
+
+## Troubleshooting
+
 ```bash
 ./prep.sh
 nix-shell
@@ -30,8 +38,6 @@ nix-repl '<nixpkgs>'
 
 This will output expanded paths, just copy it and use instead of `[RPATH]`
 below (don't forget to exit `nix-repl` before proceeding):
-
-/nix/store/y5ac95kk3nb52si8zcyznjrfb45720hk-gcc-6.4.0-lib/lib64:/nix/store/0p1vqwbbifw15ax18sppq908087ci64m-libunwind-1.2.1/lib:/nix/store/91103425ih24fkgsk7sga6pwmbayk2r1-util-linux-2.30/lib:/nix/store/m0gq3gxdnvirpsry48zvvqpcxyjz4w8k-icu4c-58.2/lib:/nix/store/ybajdccj1h5xssna16h6vv3qqda6m7l4-openssl-1.0.2l/lib
 
 ```bash
 patchelf --set-rpath "[RPATH]" .dotnet_stage0/x64/dotnet
