@@ -98,7 +98,7 @@ in
       find -type f -name "*.so" -exec patchelf --set-rpath "${rpath}" {} \;
       echo -n "dotnet-sdk version: "
       .dotnet_stage0/x64/dotnet --version
-      ./build.sh
+      ./build.sh /t:Compile
       runHook postBuild
     '';
 
