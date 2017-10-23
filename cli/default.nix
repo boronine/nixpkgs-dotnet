@@ -86,6 +86,7 @@ in
     # ];
 
     # ./build.sh
+    # DOTNET_CLI_TELEMETRY_OPTOUT=1 .dotnet_stage0/x64/dotnet ...
     buildPhase = ''
       runHook preBuild
       cp -v ${sdk203} ./dotnet-sdk-2.0.3-servicing-007037-linux-x64.tar.gz
@@ -95,11 +96,8 @@ in
       patchelf --set-rpath "${rpath}" .dotnet_stage0/x64/dotnet
       find -type f -name "*.so" -exec patchelf --set-rpath "${rpath}" {} \;
       echo -n "dotnet-sdk version: "
-      tmp=$(mktemp -d)
-      echo "TEMP PATH: $tmp"
-      export DOTNET_CLI_TELEMETRY_OPTOUT=1
       .dotnet_stage0/x64/dotnet --version
-      HOME=$tmp .dotnet_stage0/x64/dotnet restore /p:GeneratePropsFile=true --disable-parallel
+      ./build.sh
       runHook postBuild
     '';
 
