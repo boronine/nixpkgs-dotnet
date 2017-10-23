@@ -9,11 +9,11 @@
 }:
 
 let
-  rpath = "${stdenv.cc.cc.lib}/lib64:${libunwind}/lib:${libuuid.out}/lib:${icu}/lib:${openssl.out}/lib:${zlib}/lib:${curl.out}/lib";
+  rpath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc libunwind libuuid icu openssl zlib curl ];
+  version = "2.0.3";
 in
   stdenv.mkDerivation rec {
     name = "dotnet-sdk-${version}";
-    version = "2.0.3";
     src = fetchTarball "https://dotnetcli.azureedge.net/dotnet/Sdk/2.0.3-servicing-007037/dotnet-sdk-2.0.3-servicing-007037-linux-x64.tar.gz";
 
     buildPhase = ''
@@ -25,6 +25,8 @@ in
       ./dotnet --version
       runHook postBuild
     '';
+
+    dontPatchELF = true;
 
     installPhase = ''
       runHook preInstall
