@@ -11,7 +11,7 @@ nix-build shell.nix
 ```bash
 ./prep.sh
 nix-shell
-cd coreclr-2.0.0
+cd cli-2.0.2
 patchShebangs .
 substituteInPlace scripts/obtain/dotnet-install.sh \
   --replace '[ -z "$($LDCONFIG_COMMAND' '# [ -z "$($LDCONFIG_COMMAND'
