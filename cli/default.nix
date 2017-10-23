@@ -83,6 +83,7 @@ in
     #   "format"
     # ];
 
+    # ./build.sh
     buildPhase = ''
       runHook preBuild
       cp -v ${sdk203} ./dotnet-sdk-2.0.3-servicing-007037-linux-x64.tar.gz
@@ -93,7 +94,7 @@ in
       find -type f -name "*.so" -exec patchelf --set-rpath "${rpath}" {} \;
       echo -n "dotnet-sdk version: "
       .dotnet_stage0/x64/dotnet --version
-      # ./build.sh
+      .dotnet_stage0/x64/dotnet restore /p:GeneratePropsFile=true --disable-parallel
       runHook postBuild
     '';
 
