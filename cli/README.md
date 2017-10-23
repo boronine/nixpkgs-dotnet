@@ -45,5 +45,5 @@ patchelf --set-rpath "$RPATH" .dotnet_stage0/x64/dotnet
 find -type f -name "*.so" -exec patchelf --set-rpath "$RPATH" {} \;
 echo -n "dotnet-sdk version: "
 .dotnet_stage0/x64/dotnet --version
-./build.sh
+./build.sh /t:Compile
 ```
