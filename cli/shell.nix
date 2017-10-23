@@ -17,5 +17,7 @@
   # liburcu           = pkgs.liburcu;
   libuuid           = pkgs.libuuid;
   # libkrb5           = pkgs.libkrb5;
+  zlib              = pkgs.zlib;
   patchelf          = pkgs.patchelf;
+  mktemp            = pkgs.mktemp;
 }

@@ -14,7 +14,9 @@
 # , liburcu
 , libuuid
 # , libkrb5
+, zlib
 , patchelf
+, mktemp
 # , debug ? false
 }:
 
@@ -28,7 +30,7 @@ let
     url = "https://dotnetcli.azureedge.net/dotnet/Sdk/2.0.3-servicing-007037/dotnet-sdk-2.0.3-servicing-007037-linux-x64.tar.gz";
     sha256 = "0kqk1f0vfdfyb9mp7d4y83airkxyixmxb7lrx0h0hym2a9661ch8";
   };
-  rpath = "${stdenv.cc.cc.lib}/lib64:${libunwind}/lib:${libuuid.out}/lib:${icu}/lib:${openssl.out}/lib";
+  rpath = "${stdenv.cc.cc.lib}/lib64:${libunwind}/lib:${libuuid.out}/lib:${icu}/lib:${openssl.out}/lib:${zlib}/lib";
 in
   stdenv.mkDerivation rec {
     name = "cli-${version}";
@@ -93,8 +95,11 @@ in
       patchelf --set-rpath "${rpath}" .dotnet_stage0/x64/dotnet
       find -type f -name "*.so" -exec patchelf --set-rpath "${rpath}" {} \;
       echo -n "dotnet-sdk version: "
+      tmp=$(mktemp -d)
+      echo "TEMP PATH: $tmp"
+      export DOTNET_CLI_TELEMETRY_OPTOUT=1
       .dotnet_stage0/x64/dotnet --version
-      .dotnet_stage0/x64/dotnet restore /p:GeneratePropsFile=true --disable-parallel
+      HOME=$tmp .dotnet_stage0/x64/dotnet restore /p:GeneratePropsFile=true --disable-parallel
       runHook postBuild
     '';
 

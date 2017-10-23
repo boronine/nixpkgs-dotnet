@@ -33,7 +33,7 @@ Now, configure `RPATH`. But first let's figure out what is the value of required
 
 ```bash
 nix-repl '<nixpkgs>'
-> "${stdenv.cc.cc.lib}/lib64:${libunwind}/lib:${libuuid.out}/lib:${icu}/lib:${openssl.out}/lib"
+> "${stdenv.cc.cc.lib}/lib64:${libunwind}/lib:${libuuid.out}/lib:${icu}/lib:${openssl.out}/lib:${zlib}/lib"
 ```
 
 This will output expanded paths, just copy it and use instead of `[RPATH]`
