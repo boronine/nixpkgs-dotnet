@@ -38,7 +38,7 @@ in
 
     meta = with stdenv.lib; {
       homepage = http://dotnet.github.io/core/;
-      description = ".NET is a general purpose development platform";
+      description = ".NET Core SDK 2.0.2 with .NET Core 2.0.0";
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; [ kuznero ];
       license = licenses.mit;
