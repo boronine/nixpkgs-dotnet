@@ -2,6 +2,7 @@
 
 (import ./default.nix) {
   stdenv            = pkgs.stdenv;
+  fetchurl          = pkgs.fetchurl;
   libunwind         = pkgs.libunwind;
   openssl           = pkgs.openssl;
   icu               = pkgs.icu;

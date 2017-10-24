@@ -1,4 +1,5 @@
 { stdenv
+, fetchurl
 , libunwind
 , openssl
 , icu
@@ -10,11 +11,17 @@
 
 let
   rpath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc libunwind libuuid icu openssl zlib curl ];
-  version = "2.0.3";
 in
   stdenv.mkDerivation rec {
+    version = "2.0.3";
     name = "dotnet-sdk-${version}";
-    src = fetchTarball "https://dotnetcli.azureedge.net/dotnet/Sdk/2.0.3-servicing-007037/dotnet-sdk-2.0.3-servicing-007037-linux-x64.tar.gz";
+
+    src = fetchurl {
+      url = "https://dotnetcli.azureedge.net/dotnet/Sdk/2.0.3-servicing-007037/dotnet-sdk-2.0.3-servicing-007037-linux-x64.tar.gz";
+      sha256 = "0kqk1f0vfdfyb9mp7d4y83airkxyixmxb7lrx0h0hym2a9661ch8";
+    };
+
+    unpackPhase = "tar xvzf $src";
 
     buildPhase = ''
       runHook preBuild
